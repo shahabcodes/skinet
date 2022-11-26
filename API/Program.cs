@@ -1,3 +1,4 @@
+using Core.Interfaces;
 using Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,12 +6,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddSingleton<StoreContext>();
 
+/* AddScoped Creates an instance of the ProductRepository when API receives 
+an HTTP request and Create a new instance of the Controllers, disposes it later */
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.Configure<ConfigureConnection>(builder.Configuration.GetSection(ConfigureConnection.db_connections));
+builder.Services.Configure<ConfigureConnection>
+(builder.Configuration.GetSection(ConfigureConnection.db_connections));
 
 var app = builder.Build();
 
