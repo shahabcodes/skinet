@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Infrastructure.Data;
 using Core.Entities;
-using Dapper;
 using Core.Interfaces;
+using Infrastructure.Constants;
+using AutoMapper;
 
 namespace API.Controllers
 {
@@ -10,37 +10,59 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
-        private IProductRepository _context;
+        private IMapper _mapper;
+        private IGenericRepository<Product> _productsRepo;
+        private IGenericRepository<ProductTypes> _productTypesRepo;
+        private IGenericRepository<ProductBrands> _productBrandsRepo;
+        
+        public string procName= "";
 
-        public ProductsController (IProductRepository context)
+        public ProductsController (IGenericRepository<Product> productsRepo,IGenericRepository
+        <ProductTypes> productTypesRepo,IGenericRepository<ProductBrands> productBrandsRepo,
+        IMapper mapper)
         {
-            _context = context;
+            _mapper = mapper;
+            _productsRepo = productsRepo;
+            _productTypesRepo = productTypesRepo;
+            _productBrandsRepo = productBrandsRepo;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Product>>> GetProduct()
+        public async Task<ActionResult<IReadOnlyList<Product>>> GetProduct()
         {
-            var product = await _context.GetProductsAsync();
-            return Ok(product);
+            procName = StoredPocedures.GetProducts;
+            Dictionary<string, object> dictionary = new Dictionary<string, object>();
+            var product = await _productsRepo.ListAllAsync(procName, dictionary);
+            
+            return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<Product>>(product));
         }
         
-
         [HttpGet("{Id}")]
         public async Task<ActionResult<Product>> GetProduct(int Id)
         {
-            return await _context.GetProductByIdAsync(Id);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@Id", Id);
+            procName = StoredPocedures.GetProductsById;
+            var product = await _productsRepo.GetByIdAsync(procName, parameters);
+            return Ok(_mapper.Map<Product, Product>(product));
         }
-        [HttpGet("brands")]
-        public async Task<ActionResult<List<ProductBrands>>> GetProductBrands()
-        {
-            var brands = await _context.GetProductBrandsAsync();
-            return Ok(brands);
-        }
+
         [HttpGet("types")]
-        public async Task<ActionResult<List<ProductTypes>>> GetProductTypes()
+        public async Task<ActionResult<IReadOnlyList<ProductTypes>>> GetProductTypes()
         {
-            var types = await _context.GetProductTypesAsync();
+            Dictionary<string, object> dictionary = new Dictionary<string, object>();
+            procName = StoredPocedures.GetProductTypes;
+            var types = await _productTypesRepo.ListAllAsync(procName, dictionary);
             return Ok(types);
-        }              
+        } 
+
+        [HttpGet("brands")]
+        public async Task<ActionResult<IReadOnlyList<ProductBrands>>> GetProductBrands()
+        {
+            Dictionary<string, object> dictionary = new Dictionary<string, object>();
+            procName = StoredPocedures.GetProductBrands;
+            var brands = await _productBrandsRepo.ListAllAsync(procName, dictionary);
+            return Ok(brands);
+        }  
     }
 }

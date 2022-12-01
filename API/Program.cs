@@ -1,3 +1,4 @@
+using API.Helpers;
 using Core.Interfaces;
 using Infrastructure.Data;
 
@@ -9,6 +10,12 @@ builder.Services.AddSingleton<StoreContext>();
 /* AddScoped Creates an instance of the ProductRepository when API receives 
 an HTTP request and Create a new instance of the Controllers, disposes it later */
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
+// Adding Generic Repository
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+//Adding auto Mapper (Nuget Package)
+builder.Services.AddAutoMapper(typeof(Mapper)); 
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -28,6 +35,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles();
 
 app.UseAuthorization();
 
