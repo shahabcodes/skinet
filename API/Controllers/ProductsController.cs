@@ -3,12 +3,13 @@ using Core.Entities;
 using Core.Interfaces;
 using Infrastructure.Constants;
 using AutoMapper;
+using API.Errors;
 
 namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProductsController : ControllerBase
+    public class ProductsController : BaseApiController
     {
         private IMapper _mapper;
         private IGenericRepository<Product> _productsRepo;
@@ -33,17 +34,20 @@ namespace API.Controllers
             procName = StoredPocedures.GetProducts;
             Dictionary<string, object> dictionary = new Dictionary<string, object>();
             var product = await _productsRepo.ListAllAsync(procName, dictionary);
-            
-            return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<Product>>(product));
+            if (product != null)  { return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<Product>>(product)); }
+            else { return NotFound(); }
         }
         
         [HttpGet("{Id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Product>> GetProduct(int Id)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@Id", Id);
             procName = StoredPocedures.GetProductsById;
             var product = await _productsRepo.GetByIdAsync(procName, parameters);
+            if (product == null)  { return NotFound(new ApiResponse(404));  }
             return Ok(_mapper.Map<Product, Product>(product));
         }
 
@@ -53,7 +57,8 @@ namespace API.Controllers
             Dictionary<string, object> dictionary = new Dictionary<string, object>();
             procName = StoredPocedures.GetProductTypes;
             var types = await _productTypesRepo.ListAllAsync(procName, dictionary);
-            return Ok(types);
+            if (types != null) { return Ok(types); }
+            else { return NotFound(); }
         } 
 
         [HttpGet("brands")]
@@ -62,7 +67,8 @@ namespace API.Controllers
             Dictionary<string, object> dictionary = new Dictionary<string, object>();
             procName = StoredPocedures.GetProductBrands;
             var brands = await _productBrandsRepo.ListAllAsync(procName, dictionary);
-            return Ok(brands);
+            if (brands != null)  { return Ok(brands); }
+            else { return NotFound(); }
         }  
     }
 }
