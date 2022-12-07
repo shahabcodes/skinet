@@ -1,5 +1,4 @@
 using API.Extensions;
-using API.Helpers;
 using API.Middleware;
 using Infrastructure.Data;
 using NLog;
