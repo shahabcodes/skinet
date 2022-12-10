@@ -24,6 +24,15 @@ namespace API.Extensions
 
             services.AddScoped<ILoggerManager, LoggerManager>();
 
+            //Adding CORS Policy
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:7034");
+                });
+            });
+
             services.Configure<ApiBehaviorOptions>(options => 
             {
                 options.InvalidModelStateResponseFactory = actionContext =>

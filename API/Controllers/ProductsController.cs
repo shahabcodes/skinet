@@ -29,13 +29,18 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<Product>>> GetProduct()
+        public async Task<ActionResult<IReadOnlyList<Product>>> GetProduct([FromQuery]ProductSpecs specs)                                                   
         {
             procName = StoredPocedures.GetProducts;
             Dictionary<string, object> dictionary = new Dictionary<string, object>();
+            dictionary.Add("@sort", specs.sort);
+            dictionary.Add("@filterByBrand", specs.brandId);
+            dictionary.Add("@filterByType", specs.typeId);
+            dictionary.Add("@SearchText", specs.SearchText);
+            dictionary.Add("@PageId", specs.PageId);
             var product = await _productsRepo.ListAllAsync(procName, dictionary);
             if (product != null)  { return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<Product>>(product)); }
-            else { return NotFound(); }
+            else { return BadRequest(new ApiResponse(400)); }
         }
         
         [HttpGet("{Id}")]
