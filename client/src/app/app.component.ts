@@ -9,7 +9,7 @@ import { IProduct } from './models/products';
 })
 export default class AppComponent implements OnInit {
   title = 'SkiNet';
-  products: IProduct[]   //Normal JavaScript to store arra
+  products: IProduct[];  //Normal JavaScript to store arra
 
   constructor(private http: HttpClient) {  }
 
