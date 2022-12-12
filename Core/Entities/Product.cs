@@ -15,10 +15,4 @@ namespace Core.Entities
         public int PageNum{ get; set; }
         public int Rows{ get; set; }
     }
-    public class Pagination
-    {       
-        public int TotalRows{ get; set; }
-        public int PageNum{ get; set; }
-        public int Rows{ get; set; }
-    }
 }
