@@ -12,6 +12,13 @@ namespace Core.Entities
         public string? ProductBrandName { get; set; }
         public int ProductBrandId{ get; set; }
         public int TotalRows{ get; set; }
-
+        public int PageNum{ get; set; }
+        public int Rows{ get; set; }
+    }
+    public class Pagination
+    {       
+        public int TotalRows{ get; set; }
+        public int PageNum{ get; set; }
+        public int Rows{ get; set; }
     }
 }

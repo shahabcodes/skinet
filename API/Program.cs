@@ -33,11 +33,12 @@ app.UseSwaggerDocumentation();
 // Redirect to Error controller when endpoint doesn't exist
 app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
+app.UseCors("CorsPolicy");
+
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
-app.UseCors("CorsPolicy");
 
 app.UseAuthorization();
 
