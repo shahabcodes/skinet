@@ -13,6 +13,8 @@ namespace Infrastructure.Data
             _logger = logger;
             _context = context;
         }
+
+        
         public async Task<T?> GetByIdAsync(string storedProcedure, Dictionary<string, object> dictionary)
         {
             try

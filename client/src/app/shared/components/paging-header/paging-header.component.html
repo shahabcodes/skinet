@@ -1,0 +1,18 @@
+<header>
+    <span *ngIf="totalCount && totalCount > 0">
+        Showing 
+        <strong>
+            {{(PageId-1) * rows+1}} -
+            {{PageId * rows
+              > this.totalCount
+              ? this.totalCount
+              : PageId * rows
+            }} 
+        </strong> 
+        of <strong>{{this.totalCount}}</strong> results
+    </span>
+    <span *ngIf="totalCount === 0">
+        There are <strong>0 </strong>results for this filter
+
+    </span>
+</header>
