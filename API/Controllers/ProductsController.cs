@@ -56,6 +56,14 @@ namespace API.Controllers
             if (product == null) { return NotFound(new ApiResponse(404)); }
             return Ok(_mapper.Map<Product, Product>(product));
         }
+        
+
+        [HttpGet("servererror")]
+        public ActionResult GetServerError()
+        {
+            //return new ObjectResult(new ApiResponse(500));
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
 
         [HttpGet("types")]
         public async Task<ActionResult<IReadOnlyList<ProductTypes>>> GetProductTypes()
