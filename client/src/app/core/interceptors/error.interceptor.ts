@@ -7,7 +7,7 @@ import {
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { NavigationExtras, Router } from '@angular/router';
-import { catchError } from 'rxjs/operators';
+import { catchError, delay } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 
 // To use HttpInterceptor add it as a provider in app.module.ts
@@ -20,6 +20,7 @@ export class ErrorInterceptor implements HttpInterceptor {
   //next is Httpresponse which is coming back
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
+      //delay(1000),   // for Loading Indicator test
       catchError(error => {
         if (error) {
           if (error.status === 400) 

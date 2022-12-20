@@ -12,7 +12,7 @@ import { ShopService } from './shop.service';
 })
 export class ShopComponent implements OnInit {
   // Set it to false if "search" div has some directives for eg: ngIf, set it to true when there is no dynamic activity
-  @ViewChild("search", { static: true }) searchTerm: ElementRef 
+  @ViewChild("search", { static: false }) searchTerm: ElementRef 
   products: IProduct[];
   brands: IBrand[];
   types: IType[];
@@ -28,7 +28,7 @@ export class ShopComponent implements OnInit {
   constructor(private shopService: ShopService) { }
 
   ngOnInit(): void {
-    this.getBrands();
+    this.getBrands(); 
     this.getTypes();
     this.getProducts();
   }
@@ -36,7 +36,7 @@ export class ShopComponent implements OnInit {
   getProducts() {
     if (this.shopParams.PageId > 0) { this.shopParams.PageId = this.shopParams.PageId - 1; }
     this.shopService.getProducts(this.shopParams)
-      .subscribe
+      .subscribe    // always unsubscribe, note in case of http request angular is smart enough to unsubscribe autumatically
       (response => {
         if (response.length === 0) { this.totalCount = 0; }
         this.products = response;
