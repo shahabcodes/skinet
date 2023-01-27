@@ -25,11 +25,14 @@ export class ShopService {
     params = params.append('sort', shopParams.sort);
     params = params.append('PageId', shopParams.PageId.toString());
     params = params.append('rows', shopParams.rows.toString());
-
+    debugger;
     return this.http.get<IProduct[]>(this.baseUrl + 'products',
     {observe: 'response', params})
     .pipe(        //pipe is a wrapper around any rxjs operators
       map(response => {
+        debugger;
+        console.log(response);
+        debugger;
         return response.body
       })
      );

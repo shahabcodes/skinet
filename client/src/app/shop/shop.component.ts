@@ -43,6 +43,7 @@ export class ShopComponent implements OnInit {
         if (response.length > 0) {
           this.shopParams.PageId = this.products[0].pageNum + 1;
           this.shopParams.rows = this.products[0].rows;
+          debugger;
           this.totalCount = this.products[0].totalRows;
         }
 

@@ -34,9 +34,10 @@ export class TestErrorComponent implements OnInit {
   }
 
   get400Error(){
-    this.http.get(this.baseUrl + 'products/?typeId=9').subscribe
+    this.http.get(this.baseUrl + 'products/400Error').subscribe
     (response =>{
       console.log(response);
+      debugger;
     },error =>{
       console.log(error);
     });

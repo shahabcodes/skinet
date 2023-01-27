@@ -65,6 +65,12 @@ namespace API.Controllers
             return StatusCode(StatusCodes.Status500InternalServerError);
         }
 
+        [HttpGet("400Error")]
+        public ActionResult Get400Error()
+        {
+            return StatusCode(StatusCodes.Status400BadRequest);
+        }
+
         [HttpGet("types")]
         public async Task<ActionResult<IReadOnlyList<ProductTypes>>> GetProductTypes()
         {
